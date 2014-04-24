@@ -23,7 +23,7 @@ THE SOFTWARE.
 
 'use strict';
 
-var Img, Logger, env, http, fs, _, port, redis, responses, favicon, server;
+var Img, Logger, env, http, fs, _, port, persist, responses, favicon, server;
 
 // load modules
 require('colors');
@@ -50,7 +50,7 @@ if( fs.existsSync('./local_environment.js')){
 // load custom modules
 Logger    = require('./lib/logger');
 Img       = require('./lib/image');
-redis     = require('./lib/redis');
+persist     = require('./lib/persist')();
 responses = require('./lib/response');
 favicon   = require('./lib/favicon');
 
@@ -61,17 +61,17 @@ port = process.env.PORT || 5000;
 
 server = http.createServer(function(request, response) {
   var generateVersion, img, log;
-
   // create a Logger instance
   log = new Logger(request, { port: port });
-
   generateVersion = function(img) {
+    console.log(img);
     img.findOriginal()
       .catch(function(err) {
         responses.response500(response, log, err.message);
       })
       .done(function(original) {
         if (original) {
+          console.log(original);
           log.log('Processing optimised version');
 
           img.generateVersion()
@@ -102,7 +102,7 @@ server = http.createServer(function(request, response) {
     break;
 
   case '/health':
-    redis.ping()
+    persist.ping()
       .catch(function(err) {
         responses.response500(response, log, err.message);
       })
@@ -114,7 +114,6 @@ server = http.createServer(function(request, response) {
   default:
     // instantiate an Img class
     img = new Img(request, log);
-
     // check to see if the extension is in the valid list
     if (!img.validExtension()) {
       log.log('Unknown file extension:', img.ext);
@@ -148,12 +147,12 @@ server = http.createServer(function(request, response) {
         });
       return;
     }
-
     img.findVersion()
       .catch(function(err) {
         responses.response500(response, log, err.message);
       })
       .done(function(versionExists) {
+        console.log(versionExists);
         if (versionExists === true) {
           log.log('Version found');
           responses.response302(response, log, img);

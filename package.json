@@ -14,10 +14,10 @@
     "heroku",
     "optimization"
   ],
-  "author": "James Nicol <james.andrew.nicol@gmail.com> (https://github.com/jimmynicol)",
+  "author": "Clinton Powell (https://github.com/clintonpowell)",
   "license": {
     "type": "MIT",
-    "url": "http://github.com/jimmynicol/image-resizer/raw/master/LICENSE"
+    "url": "http://github.com/clintonpowell/image-resizer/raw/master/LICENSE"
   },
   "engines": {
     "node": "0.10.25"
@@ -28,8 +28,8 @@
     "lodash": "~1.3.1",
     "node-uuid": "~1.4.1",
     "q": "~0.9.7",
-    "redis": "~0.10.0",
-    "aws-sdk": "~2.0.0-rc4"
+    "aws-sdk": "~2.0.0-rc4",
+    "mongoskin": "~1.4.1"
   },
   "devDependencies": {
     "chai": "~1.7.2",
